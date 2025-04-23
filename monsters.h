@@ -12,6 +12,7 @@ public:
             int                 hp,
             int                 damage,
             sf::Color           base);
+    virtual ~Monster() = default;
 
     virtual void update(float dt, const Player&, const Maze&);
     void         hurt(int dmg);
@@ -21,6 +22,7 @@ public:
     const sf::CircleShape& shape()    const { return shape_; }
     int  hp()      const { return hp_;  }
     int  maxHp()   const { return maxHp_; }
+    
 
 protected:
     sf::CircleShape shape_;

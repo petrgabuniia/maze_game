@@ -16,6 +16,7 @@ void Player::hurt(int dmg)
     health_ -= dmg;
     flash_   = .25f;
     shape_.setFillColor(sf::Color::Red);
+    if (health_ < 0) health_ = 0;
 }
 
 void Player::update(float dt,const Maze& maze)

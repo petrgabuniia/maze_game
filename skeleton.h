@@ -5,6 +5,6 @@
 class Skeleton : public Monster
 {
 public:
-    Skeleton(const sf::Vector2f& pos, int hp, int dmg);
-    void update(float dt, const Player&, const Maze&) override;
+    Skeleton(const sf::Vector2f& pos, int hp, int dmg, float spd);
+    void update(float dt,const Player&p,const Maze&m) override;
 };
