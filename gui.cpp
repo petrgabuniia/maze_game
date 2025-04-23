@@ -2,7 +2,9 @@
 #include <optional>
 #include "game.h"
 
-constexpr int cellsW=25,cellsH=18,cell=32;
+constexpr int cellsW = 25;
+constexpr int cellsH = 18;
+constexpr int cell   = 32;
 
 int main()
 {
@@ -12,27 +14,20 @@ int main()
                            sf::State::Windowed});
     win.setVerticalSyncEnabled(true);
 
-    Game game(cellsW,cellsH);
-    sf::Clock clk;
+    Game game(cellsW, cellsH);
+    sf::Clock clock;
 
-    while(win.isOpen())
+    while (win.isOpen())
     {
-        while(auto ev=win.pollEvent())
+        while (auto ev = win.pollEvent())
         {
             if (ev->is<sf::Event::Closed>()) win.close();
-
-            if (ev->is<sf::Event::KeyPressed>())
-            {
-                auto key=ev->getIf<sf::Event::KeyPressed>()->code;
-                if (key==sf::Keyboard::Key::Escape) win.close();
-                else if (key==sf::Keyboard::Key::Tab)
-                    game.inventory().toggle();
-                else if (game.inventory().isOpen())
-                    game.inventory().handleKey(key);
-            }
+            if (ev->is<sf::Event::KeyPressed>() &&
+                ev->getIf<sf::Event::KeyPressed>()->code == sf::Keyboard::Key::Escape)
+                win.close();
         }
 
-        float dt=clk.restart().asSeconds();
+        float dt = clock.restart().asSeconds();
         game.update(dt);
 
         win.clear(sf::Color::Black);

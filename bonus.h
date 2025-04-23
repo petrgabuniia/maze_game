@@ -7,9 +7,10 @@ class Bonus
 {
 public:
     explicit Bonus(const sf::Vector2f& pos);
-    virtual ~Bonus();                          // v-table anchor
+    virtual ~Bonus();
 
     virtual void apply(Player&) = 0;
+    virtual int  points() const = 0;     // ★ new
 
     bool          collected() const { return collected_; }
     sf::FloatRect bounds()    const { return shape_.getGlobalBounds(); }
