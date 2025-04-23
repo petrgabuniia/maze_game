@@ -19,6 +19,8 @@ public:
 
     sf::Vector2f           position() const { return shape_.getPosition(); }
     const sf::CircleShape& shape()    const { return shape_; }
+    int  hp()      const { return hp_;  }
+    int  maxHp()   const { return maxHp_; }
 
 protected:
     sf::CircleShape shape_;

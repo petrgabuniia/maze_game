@@ -94,4 +94,24 @@ void Game::draw(sf::RenderWindow& w) const
     w.draw(scoreText_);
 
     if(won_) w.draw(winText_);
+
+    for(const auto& m:monsters_) if(m->alive()) w.draw(m->shape());
+
+    auto drawBar = [&](sf::Vector2f pos, float ratio)
+    {
+        constexpr float W = 30.f, H = 4.f;
+        sf::RectangleShape back({W, H});
+        back.setFillColor(sf::Color(50,50,50));
+        back.setPosition(pos);
+        sf::RectangleShape fill({W*ratio, H});
+        fill.setFillColor(sf::Color(0,200,0));
+        fill.setPosition(pos);
+        w.draw(back); w.draw(fill);
+    };
+    
+    drawBar(player_.position() + sf::Vector2f{-15.f, -28.f}, float(player_.hp())/player_.maxHp());
+
+    for(const auto& m:monsters_) if(m->alive())
+        drawBar(m->position() + sf::Vector2f{-15.f, -30.f}, float(m->hp())/m->maxHp());
+
 }

@@ -22,6 +22,8 @@ public:
     sf::Vector2f position() const { return pos_; }
     sf::FloatRect bounds()  const { return shape_.getGlobalBounds(); }
     const sf::CircleShape& shape() const { return shape_; }
+    int    hp()       const { return health_; }
+    int    maxHp()   const { return maxHealth_; }
 
 private:
     sf::CircleShape shape_;
@@ -30,5 +32,6 @@ private:
     int    attack_{1};
     void   boostAttack(int n){ attack_ += n; }
     int    health_{10};
+    int    maxHealth_{10};
     float  flash_{0.f};
 };

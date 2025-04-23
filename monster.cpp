@@ -17,6 +17,7 @@ void Monster::hurt(int dmg)
 {
     if (!alive_) return;
     hp_ -= dmg;
+    if(hp_<0) hp_=0;
     flash_ = .25f;
     shape_.setFillColor(sf::Color::Yellow);
     if (hp_ <= 0) { alive_ = false; respawn_ = 5.f; }
