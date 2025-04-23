@@ -8,14 +8,20 @@
 #include "player.h"
 #include "bonus.h"
 
+enum class Difficulty{Easy,Medium,Hard};
+
+struct DiffParams{
+    unsigned monsters;
+    int  monsterHp;
+    int  monsterDmg;
+    int  playerAtk;
+};
+
 class Monster;
-
-enum class Difficulty { Easy = 3, Normal = 6, Hard = 10 };
-
 class Game
 {
 public:
-    Game(unsigned mazeW, unsigned mazeH, Difficulty d = Difficulty::Normal);
+    Game(unsigned w,unsigned h,Difficulty d=Difficulty::Medium);
     ~Game();
 
     void update(float dt);
@@ -25,14 +31,16 @@ private:
     std::unique_ptr<Monster> spawnMonster(std::mt19937&);
     std::unique_ptr<Bonus>   spawnCoin   (std::mt19937&);
 
-    static constexpr unsigned cell_ = 32;
+    static constexpr unsigned cell_=32;
+    static const DiffParams   DIFF[3];
 
-    Maze                                   maze_;
-    Player                                 player_;
-    std::vector<std::unique_ptr<Monster>>  monsters_;
-    std::vector<std::unique_ptr<Bonus>>    coins_;
+    Difficulty                       diff_;
+    DiffParams                       params_;
+    Maze                             maze_;
+    Player                           player_;
+    std::vector<std::unique_ptr<Monster>> monsters_;
+    std::vector<std::unique_ptr<Bonus>>   coins_;
 
-    // UI
     sf::Font  font_;
     sf::Text  winText_;
     mutable sf::Text  scoreText_;

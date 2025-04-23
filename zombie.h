@@ -5,7 +5,7 @@
 class Zombie : public Monster
 {
 public:
-    explicit Zombie(const sf::Vector2f& pos);
-    void update(float dt, const Player& p, const Maze& m) override
-    { Monster::update(dt, p, m); }
+    Zombie(const sf::Vector2f& pos, int hp, int dmg);
+    void update(float dt,const Player&p,const Maze&m) override
+    { Monster::update(dt,p,m); }
 };
