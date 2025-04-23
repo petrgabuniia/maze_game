@@ -71,4 +71,15 @@ void Maze::draw(sf::RenderWindow& w) const
         brick.setPosition(box.position);
         w.draw(brick);
     }
+
+    sf::RectangleShape sq({float(cell_/2), float(cell_/2)});
+    for (int dy=0; dy<2; ++dy)
+      for (int dx=0; dx<2; ++dx)
+      {
+        sq.setPosition({ exit_.x + dx*cell_/2.f, exit_.y + dy*cell_/2.f });
+          bool black = (dx ^ dy);
+          sq.setFillColor(black?sf::Color::Black:sf::Color::White);
+          w.draw(sq);
+      }
+ 
 }

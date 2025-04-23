@@ -26,6 +26,7 @@ public:
 
     void update(float dt);
     void draw(sf::RenderWindow&) const;
+    bool finished() const { return won_; }
 
 private:
     std::unique_ptr<Monster> spawnMonster(std::mt19937&);
@@ -46,4 +47,5 @@ private:
     mutable sf::Text  scoreText_;
     int       score_{0};
     bool      won_{false};
+    Difficulty  difficulty() const { return diff_; }
 };
