@@ -1,4 +1,3 @@
-// zombie.h
 #pragma once
 #include "monsters.h"
 
@@ -7,5 +6,7 @@ class Zombie : public Monster
 public:
     Zombie(const sf::Vector2f& pos, int hp, int dmg, float spd);
     void update(float dt,const Player&p,const Maze&m) override
-    { Monster::update(dt,p,m); }
+    { 
+        Monster::update(dt,p,m); 
+    }
 };

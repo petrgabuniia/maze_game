@@ -29,7 +29,7 @@ protected:
     sf::Color       baseColor_;
     float           speed_;
     int             hp_, maxHp_;
-    int             damage_;          // ← how much this monster hurts player
+    int             damage_;         
     bool            alive_{true};
     float           respawn_{0.f};
     float           flash_{0.f};
