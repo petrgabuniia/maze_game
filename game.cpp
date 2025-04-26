@@ -6,7 +6,6 @@
 #include "gold_coin.h"
 #include <SFML/Window/Keyboard.hpp>
 
-// ------------------------------------------------------------------
 Game::Game(unsigned w, unsigned h, const Params& p)
 : maze_(w,h,cell_)
 , player_(maze_.entrance())
@@ -26,9 +25,8 @@ Game::Game(unsigned w, unsigned h, const Params& p)
     scoreTxt_.setString("Score: 0");
 
     player_.setAttack(params_.playerAtk);
-    // set player HP & speed
-    player_.hurt(0);        // sync bar
-    player_.heal(params_.playerHp); // (helper you can add)
+    player_.hurt(0);       
+    player_.heal(params_.playerHp); 
     player_.heal(params_.playerHp);
 
     std::mt19937 rng(std::random_device{}());
@@ -37,7 +35,7 @@ Game::Game(unsigned w, unsigned h, const Params& p)
     for(unsigned i=0;i<25;++i) coins_.push_back(spawnCoin(rng));
 }
 
-// FACTORIES ----------------------------------------------------------
+
 std::unique_ptr<Monster> Game::makeZombie(std::mt19937& r,const Params& p)
 {
     std::uniform_real_distribution<float> fx(cell_,maze_.exitPos().x);
@@ -71,11 +69,9 @@ void Game::update(float dt)
     player_.update(dt, maze_);
     for (auto& m : monsters_) m->update(dt, player_, maze_);
 
-    // melee on Space
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
         for (auto& m : monsters_) if (m->alive()) player_.tryHit(*m);
 
-    // coins
     for (auto& c : coins_)
         if (!c->collected() &&
             player_.bounds().findIntersection(c->bounds()))
@@ -85,7 +81,6 @@ void Game::update(float dt)
             scoreTxt_.setString("Score: " + std::to_string(score_));
         }
 
-    // win / lose
     if (player_.dead())
     {
         banner_.setString("You died!");
@@ -104,7 +99,6 @@ void Game::draw(sf::RenderWindow& w) const
     w.draw(player_.shape());
     for (const auto& m : monsters_) if (m->alive()) w.draw(m->shape());
 
-    // health bars ---------------------------------------------------
     auto bar = [&](sf::Vector2f pos, float ratio)
     {
         ratio = std::clamp(ratio, 0.f, 1.f);
@@ -127,7 +121,6 @@ void Game::draw(sf::RenderWindow& w) const
         bar(m->position() + sf::Vector2f{-15.f,-30.f},
             float(m->hp())/m->maxHp());
 
-    // score (top-right)
     auto b = scoreTxt_.getLocalBounds();
     scoreTxt_.setPosition({ w.getSize().x - b.size.x - 20.f, 10.f });
     w.draw(scoreTxt_);

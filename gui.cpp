@@ -6,28 +6,23 @@ constexpr int cellsW = 25;
 constexpr int cellsH = 18;
 constexpr int cell   = 32;
 
-// ------------------------------------------------------------------
-// persistent font accessor
+
 static const sf::Font& font()
 {
-    static sf::Font f;
-    static bool once = false;
-    if (!once)
-    {
-        (void)f.openFromFile("/System/Library/Fonts/Supplemental/Arial.ttf");
-        once = true;
-    }
-    return f;
+    static const sf::Font* f = []{
+        auto* fp = new sf::Font;
+        fp->openFromFile("/System/Library/Fonts/Supplemental/Arial.ttf");
+        return fp;
+    }();
+    return *f;
 }
 
 
-// ------------------------------------------------------------------
-// predefined parameter sets
+
 static const Params EASY   {10,3,120,   3,3,4,60,   3,2,1,79};
 static const Params MEDIUM {10,2,120,   5,6,5,70,   5,3,2,99};
 static const Params HARD   {10,1,120,   7,9,6,80,   7,4,3,119};
 
-// readable block
 static sf::Text block(const char* title, const Params& p, float y)
 {
     std::ostringstream ss;
@@ -35,7 +30,7 @@ static sf::Text block(const char* title, const Params& p, float y)
        << "Number of zombies: "    << p.zombies   << ",  zombie's HP: "  << p.zHp << ", zombie's  damage per hit: " << p.zDmg << ", zombie's speed: " << p.zSpeed << '\n'
        << "Number of skeletons: "  << p.skeletons << ", skeleton's HP: "  << p.sHp << ", skeleton's  damage per hit " << p.sDmg << ", skeleton's speed: " << p.sSpeed;
 
-    sf::Text t(font());          // ← pass font by *reference*
+    sf::Text t(font());          
     t.setString(std::string(title) + "\n" + ss.str());
     t.setCharacterSize(18);
     t.setPosition({40.f, y});
@@ -44,8 +39,7 @@ static sf::Text block(const char* title, const Params& p, float y)
 
 enum Choice { None, PickEasy, PickMed, PickHard, PickCustom };
 
-// ------------------------------------------------------------------
-// difficulty menu
+
 Choice menu(sf::RenderWindow& win)
 {
     sf::Text prompt(font());
@@ -56,7 +50,6 @@ Choice menu(sf::RenderWindow& win)
     auto m = block("2) Medium", MEDIUM, 180);
     auto h = block("3) Hard",   HARD,   270);
 
-    // simple label for custom
     sf::Text c(font());
     c.setString("4) Custom …");
     c.setCharacterSize(18);
@@ -93,8 +86,7 @@ Choice menu(sf::RenderWindow& win)
     return None;
 }
 
-// ------------------------------------------------------------------
-// numeric entry helper
+
 static int getNumber(sf::RenderWindow& win,
                      const std::string& label, int def)
 {
@@ -124,10 +116,10 @@ static int getNumber(sf::RenderWindow& win,
     return def;
 }
 
-// wizard for custom params
+
 Params customWizard(sf::RenderWindow& win)
 {
-    Params p = EASY; // defaults
+    Params p = EASY; 
     p.playerHp  = getNumber(win, "Player HP",        10);
     p.playerAtk = getNumber(win, "Player attack",     2);
     p.zombies   = getNumber(win, "Number of zombies", 5);
@@ -139,8 +131,7 @@ Params customWizard(sf::RenderWindow& win)
     return p;
 }
 
-// ------------------------------------------------------------------
-// MAIN LOOP
+
 int main()
 {
     sf::RenderWindow win({sf::VideoMode({unsigned(cellsW*cell),
