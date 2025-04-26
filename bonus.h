@@ -35,13 +35,11 @@ protected:
     Bonus(const sf::Vector2f& pos, char letter, sf::Color fill)
         : label_(coinFont(), std::string(1, letter), 14)  
     {
-        // circle
         shape_.setRadius(12.f);
         shape_.setOrigin({12.f, 12.f});
         shape_.setFillColor(fill);
         shape_.setPosition(pos);
 
-        // letter
         label_.setFillColor(sf::Color::Black);
         auto r = label_.getLocalBounds();
         label_.setOrigin({ r.size.x / 2.f, r.size.y / 2.f + 3});
