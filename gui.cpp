@@ -38,43 +38,67 @@ enum Choice{None,PickEasy,PickMed,PickHard,PickCustom};
 
 Choice menu(sf::RenderWindow& win)
 {
-    sf::Text prompt(font(),"Click or press 1-4",24);
-    prompt.setPosition({60,30});
+    sf::Text title(font(), "Select difficulty", 32);
+    title.setPosition({50, 30});
 
-    auto e=block("1) Easy",  EASY,   90);
-    auto m=block("2) Medium",MEDIUM, 180);
-    auto h=block("3) Hard",  HARD,   270);
-    sf::Text c(font(),"4) Custom …",18); c.setPosition({40,360});
+    const float W = 180, H = 50;
+    const float left = 70, top = 110, gap = 70;
 
-    while(win.isOpen())
+    sf::RectangleShape easyBox  ({W, H});
+    sf::RectangleShape medBox   ({W, H});
+    sf::RectangleShape hardBox  ({W, H});
+    sf::RectangleShape custBox  ({W, H});
+
+    easyBox .setPosition({left,      top});
+    medBox  .setPosition({left,      top + gap});
+    hardBox .setPosition({left,      top + 2*gap});
+    custBox .setPosition({left,      top + 3*gap});
+
+    for(auto* r : {&easyBox,&medBox,&hardBox,&custBox})
+        r->setFillColor({70,70,70});
+
+    sf::Text easyLbl (font(),"Easy",   20);
+    sf::Text medLbl  (font(),"Medium", 20);
+    sf::Text hardLbl (font(),"Hard",   20);
+    sf::Text custLbl (font(),"Custom",  20);
+
+    easyLbl .setPosition({left+1+W/2.f - 28, top+H/2.f - 13});
+    medLbl  .setPosition({left+W/2.f -33, top+H/2.f+gap - 13});
+    hardLbl .setPosition({left+W/2.f-26, top+H/2.f+2*gap - 13});
+    custLbl .setPosition({left+W/2.f-30, top+H/2.f+3*gap - 13});
+
+
+    while (win.isOpen())
     {
-        while(auto ev=win.pollEvent())
+        while (auto ev = win.pollEvent())
         {
-            if(ev->is<sf::Event::Closed>()) win.close();
-            if(ev->is<sf::Event::KeyPressed>())
+            if (ev->is<sf::Event::Closed>()) win.close();
+
+            if (ev->is<sf::Event::MouseButtonPressed>() &&
+                ev->getIf<sf::Event::MouseButtonPressed>()->button ==
+                     sf::Mouse::Button::Left)
             {
-                auto k=ev->getIf<sf::Event::KeyPressed>()->code;
-                if(k==sf::Keyboard::Key::Num1) return PickEasy;
-                if(k==sf::Keyboard::Key::Num2) return PickMed;
-                if(k==sf::Keyboard::Key::Num3) return PickHard;
-                if(k==sf::Keyboard::Key::Num4) return PickCustom;
-            }
-            if(ev->is<sf::Event::MouseButtonPressed>())
-            {
-                sf::Vector2f p = static_cast<sf::Vector2f>(
+                sf::Vector2f m = static_cast<sf::Vector2f>(
                     ev->getIf<sf::Event::MouseButtonPressed>()->position);
-                if(e.getGlobalBounds().contains(p)) return PickEasy;
-                if(m.getGlobalBounds().contains(p)) return PickMed;
-                if(h.getGlobalBounds().contains(p)) return PickHard;
-                if(c.getGlobalBounds().contains(p)) return PickCustom;
+
+                if (easyBox .getGlobalBounds().contains(m)) return PickEasy;
+                if (medBox  .getGlobalBounds().contains(m)) return PickMed;
+                if (hardBox .getGlobalBounds().contains(m)) return PickHard;
+                if (custBox .getGlobalBounds().contains(m)) return PickCustom;
             }
         }
+
         win.clear(sf::Color(20,20,20));
-        win.draw(prompt); win.draw(e); win.draw(m); win.draw(h); win.draw(c);
+        win.draw(title);
+        win.draw(easyBox);  win.draw(easyLbl);
+        win.draw(medBox);   win.draw(medLbl);
+        win.draw(hardBox);  win.draw(hardLbl);
+        win.draw(custBox);  win.draw(custLbl);
         win.display();
     }
     return None;
 }
+
 
 
 static int getNumber(sf::RenderWindow& win,const std::string& label,int def)
