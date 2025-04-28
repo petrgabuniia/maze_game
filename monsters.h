@@ -4,34 +4,46 @@
 class Player;
 class Maze;
 
-class Monster
-{
+class Monster {
 public:
-    Monster(const sf::Vector2f& pos,
-            float               speed,
-            int                 hp,
-            int                 damage,
-            sf::Color           base);
+    Monster(sf::Vector2f pos, float speed, int hp, int dmg, sf::Color body);
     virtual ~Monster() = default;
 
-    virtual void update(float dt, const Player&, const Maze&);
-    void         hurt(int dmg);
-    bool         alive() const { return alive_; }
+    virtual void update(float dt, const Player& player, const Maze&);
+    virtual void draw(sf::RenderWindow& w) const;
 
-    sf::Vector2f           position() const { return shape_.getPosition(); }
+    void  hurt(int n)           { hp_ = std::max(0, hp_ - n); }
+    bool  alive()    const      { return hp_ > 0; }
+    int   hp()       const      { return hp_; }
+    int   maxHp()    const      { return maxHp_; }
+    int   damage()   const      { return damage_; }
+    sf::Vector2f position() const { return shape_.getPosition(); }
     const sf::CircleShape& shape()    const { return shape_; }
-    int  hp()      const { return hp_;  }
-    int  maxHp()   const { return maxHp_; }
-    
+    sf::FloatRect bounds()  const { return shape_.getGlobalBounds(); }
 
 protected:
     sf::CircleShape shape_;
-    sf::Color       baseColor_;
     float           speed_;
     int             hp_, maxHp_;
-    int             damage_;         
-    bool            alive_{true};
-    float           respawn_{0.f};
+    int             damage_;
+    bool           alive_{true};
+    float           respawn_{5.f};
+    sf::Color       baseColor_;
     float           flash_{0.f};
     float           atkCd_{0.f};
+};
+
+
+class Zombie : public Monster {
+public:
+    Zombie(sf::Vector2f pos, int hp, int dmg, float speed)
+    : Monster(pos, speed, hp, dmg, sf::Color(100,255,100))
+    {}
+};
+
+class Skeleton : public Monster {
+public:
+    Skeleton(sf::Vector2f pos, int hp, int dmg, float speed)
+    : Monster(pos, speed, hp, dmg, sf::Color::White)
+    {}
 };

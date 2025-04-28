@@ -6,8 +6,9 @@ class Maze
 {
 public:
     enum class Cell { Wall, Floor, Exit };
+    unsigned w_, h_, cell_;
 
-    Maze(unsigned w, unsigned h, unsigned cell);
+    Maze(unsigned w_, unsigned h_, unsigned cell_);
 
     bool  isWallPixel(float px, float py) const;
     const std::vector<sf::FloatRect>& walls()   const { return walls_; }
@@ -26,7 +27,7 @@ public:
     void draw(sf::RenderWindow&) const;
 
 private:
-    unsigned                        w_, h_, cell_;
+    
     std::vector<std::vector<Cell>>  grid_;
     std::vector<sf::FloatRect>      walls_;
     sf::Vector2f                    exit_;

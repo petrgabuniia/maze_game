@@ -1,9 +1,5 @@
 #include "game.h"
-#include "zombie.h"
-#include "skeleton.h"
-#include "bronze_coin.h"
-#include "silver_coin.h"
-#include "gold_coin.h"
+#include "monsters.h"
 #include <SFML/Window/Keyboard.hpp>
 
 Game::Game(unsigned w, unsigned h, const Params& p)
@@ -35,19 +31,37 @@ Game::Game(unsigned w, unsigned h, const Params& p)
     for(unsigned i=0;i<25;++i) coins_.push_back(spawnCoin(rng));
 }
 
+std::unique_ptr<Monster> Game::spawnRandomMonster(std::mt19937& r) {
+    std::uniform_real_distribution<float> fx(cell_,maze_.exitPos().x);
+    std::uniform_real_distribution<float> fy(cell_,maze_.exitPos().y);
+    sf::Vector2f pos{ fx(r), fy(r) };
+    if (r() & 1)
+        return std::make_unique<Zombie>(pos,
+                                        params_.zHp,
+                                        params_.zDmg,
+                                        params_.zSpeed);
+    else
+        return std::make_unique<Skeleton>(pos,
+                                          params_.sHp,
+                                          params_.sDmg,
+                                          params_.sSpeed);
+}
 
-std::unique_ptr<Monster> Game::makeZombie(std::mt19937& r,const Params& p)
-{
-    std::uniform_real_distribution<float> fx(cell_,maze_.exitPos().x);
-    std::uniform_real_distribution<float> fy(cell_,maze_.exitPos().y);
-    return std::make_unique<Zombie>(sf::Vector2f{fx(r),fy(r)},p.zHp,p.zDmg,p.zSpeed);
+std::unique_ptr<Monster> Game::makeZombie(std::mt19937& r, const Params& p) {
+    std::uniform_real_distribution<float> fx(cell_, maze_.exitPos().x);
+    std::uniform_real_distribution<float> fy(cell_, maze_.exitPos().y);
+    sf::Vector2f pos{ fx(r), fy(r) };
+    return std::make_unique<Zombie>(pos, p.zHp, p.zDmg, p.zSpeed);
 }
-std::unique_ptr<Monster> Game::makeSkeleton(std::mt19937& r,const Params& p)
-{
-    std::uniform_real_distribution<float> fx(cell_,maze_.exitPos().x);
-    std::uniform_real_distribution<float> fy(cell_,maze_.exitPos().y);
-    return std::make_unique<Skeleton>(sf::Vector2f{fx(r),fy(r)},p.sHp,p.sDmg,p.sSpeed);
+
+std::unique_ptr<Monster> Game::makeSkeleton(std::mt19937& r, const Params& p) {
+    std::uniform_real_distribution<float> fx(cell_, maze_.exitPos().x);
+    std::uniform_real_distribution<float> fy(cell_, maze_.exitPos().y);
+    sf::Vector2f pos{ fx(r), fy(r) };
+    return std::make_unique<Skeleton>(pos, p.sHp, p.sDmg, p.sSpeed);
 }
+
+
 std::unique_ptr<Bonus> Game::spawnCoin(std::mt19937& r)
 {
     std::uniform_real_distribution<float> fx(cell_, maze_.exitPos().x);
