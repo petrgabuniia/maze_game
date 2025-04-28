@@ -26,9 +26,13 @@ void Player::update(float dt,const Maze& maze)
     sf::Vector2f v{};
     using K=sf::Keyboard::Key;
     if(sf::Keyboard::isKeyPressed(K::W))v.y-=1;
+    if(sf::Keyboard::isKeyPressed(K::Up))v.y-=1;
     if(sf::Keyboard::isKeyPressed(K::S))v.y+=1;
+    if(sf::Keyboard::isKeyPressed(K::Down))v.y+=1;
     if(sf::Keyboard::isKeyPressed(K::A))v.x-=1;
+    if(sf::Keyboard::isKeyPressed(K::Left))v.x-=1;
     if(sf::Keyboard::isKeyPressed(K::D))v.x+=1;
+    if(sf::Keyboard::isKeyPressed(K::Right))v.x+=1;
     if(v==sf::Vector2f{})return;
     float len=std::sqrt(v.x*v.x+v.y*v.y);
     v/=len; v*=speed_*dt;

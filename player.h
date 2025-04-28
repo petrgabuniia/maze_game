@@ -20,8 +20,6 @@ public:
     bool tryHit(Monster&);
     void hurt(int dmg);
 
-    // exposed helpers for custom difficulty
-    void boostAttack(int n) { attack_ += n; }
     void heal(int hp)       { health_ = maxHealth_ = hp; }
 
     void   setAttack(int a) { attack_ = a; }

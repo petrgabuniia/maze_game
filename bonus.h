@@ -13,8 +13,6 @@ inline const sf::Font& coinFont()
     return *f;
 }
 
-
-
 class Bonus
 {
 public:

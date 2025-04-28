@@ -12,18 +12,15 @@ enum class Difficulty { Easy, Medium, Hard, Custom };
 
 struct Params
 {
-    // player
     int   playerHp;
     int   playerAtk;
     float playerSpeed;
 
-    // zombie
     unsigned zombies;
     int   zHp;
     int   zDmg;
     float zSpeed;
 
-    // skeleton
     unsigned skeletons;
     int   sHp;
     int   sDmg;

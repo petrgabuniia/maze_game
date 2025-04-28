@@ -53,14 +53,12 @@ Maze::Maze(unsigned w, unsigned h, unsigned cell)
                 walls_.emplace_back(sf::Vector2f{float(x*cell_), float(y*cell_)},
                                     sf::Vector2f{float(cell_),  float(cell_)});
 }
-// -----------------------------------------------------------------
 bool Maze::isWallPixel(float px, float py) const
 {
     unsigned cx = px / cell_, cy = py / cell_;
     if (cx>=w_ || cy>=h_) return true;
     return grid_[cy][cx] == Cell::Wall;
 }
-// -----------------------------------------------------------------
 void Maze::draw(sf::RenderWindow& w) const
 {
     sf::RectangleShape brick({float(cell_), float(cell_)});
