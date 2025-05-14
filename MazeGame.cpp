@@ -41,7 +41,7 @@
         }; 
         return eng;
     }
-     // Generate a pseudo-random float in the range [a, b)
+     // Pseudo-random float generator
      inline float randF(float a, float b) {
          std::uniform_real_distribution<float> d(a, b);
          return d(rng());
@@ -124,8 +124,8 @@
          bool carved = false;
          for (int k : ord) {
              auto nxt = cur + dir[k];
-             if (!inMaze(nxt) || grid_[nxt.y][nxt.x] != Cell::Wall) continue;
- 
+             if (!inMaze(nxt) || grid_[nxt.y][nxt.x] != Cell::Wall) continue; // Check if cell is already carved
+
              // Knock down the wall between cur → nxt
              grid_[cur.y + dir[k].y / 2][cur.x + dir[k].x / 2] = Cell::Floor;
              grid_[nxt.y][nxt.x] = Cell::Floor;
@@ -234,7 +234,7 @@
      };
      int range_     { 
         32 
-     }; // melee attack range
+     }; // attack range
      float flash_      { 
         0.f 
     }; // red flash when hurt
@@ -294,9 +294,12 @@
      int  maxHp() const { 
         return maxHp_; 
     }
-     int  dmg()   const {
-         return dmg_; 
-        }
+    int  dmg()   const {
+        return dmg_; 
+    }
+    int attack_range() const { 
+        return 10;
+    }
      sf::Vector2f pos() const { 
         return shape_.getPosition(); 
     }
@@ -307,11 +310,17 @@
  private:
      float speed_;
      int   hp_, maxHp_, dmg_;
-     bool  alive_{ true };
+     bool  alive_{ 
+        true
+     };
  
      // Timers 
-     float respawn_{ 5.f }; // seconds after death
-     float flash_  { 0.f }; // hit flash
+     float respawn_{ 
+        5.f 
+    }; // seconds after death
+     float flash_  { 
+        0.f 
+    }; // hit flash
      float atkCD_  { 0.f }; // attack cooldown (seconds)
  
      const sf::Color base_; // default colour
@@ -354,7 +363,7 @@
      if (!mz.isWall(next.x, next.y)) shape_.setPosition(next);
  
      // Attack player if in range
-     if ((atkCD_ -= dt) <= 0 && len < 10.f) {
+     if ((atkCD_ -= dt) <= 0 && len < attack_range()) {
          pl.hurt(dmg_);
          atkCD_ = 0.8f;
          flash_ = 0.25f;
@@ -607,7 +616,7 @@
  static Params customForm(sf::RenderWindow& win) {
      Params p{};
  
-     // Lightweight form field wrapper (variant targets int|float in Params).
+     // Window title
      struct Field {
          sf::RectangleShape box{ { 120.f, 40.f } };
          sf::Text           txt;
@@ -615,7 +624,7 @@
          std::string        buf;
          const char*        label;
  
-         Field(const char* l, int* pi, float* pf, float y)
+         Field(const char* l, int* pi, float* pf, float y) // constructor
              : txt(util::font(), "", 20), ptr(pi ? std::variant<int*, float*>{ pi } : pf), label(l) {
              box.setFillColor({ 60, 60, 60 });
              box.setPosition({ 310.f, y });
@@ -628,7 +637,7 @@
              txt.setString(buf.empty() ? "_" : buf);
              util::centre(txt, box.getGlobalBounds());
          }
-         void commit() {
+         void commit() { 
              if (std::holds_alternative<int*>(ptr))
                  *std::get<int*>(ptr) = std::stoi(buf.empty() ? "0" : buf);
              else
