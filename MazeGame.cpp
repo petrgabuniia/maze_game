@@ -646,7 +646,7 @@
      };
  
      // Lay out form – one row per attribute.
-     const float top = 90.f, row = 48.f;
+     const float top = 30.f, row = 48.f;
      std::vector<Field> f = {
          { "Player HP",             &p.playerHp,          nullptr,           top },
          { "Player ATK",            &p.playerAtk,         nullptr,           top + row },
